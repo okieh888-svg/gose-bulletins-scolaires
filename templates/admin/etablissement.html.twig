@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ etablissement.nom }} — GOSE{% endblock %}
+{% block body %}
+<h1>{{ etablissement.nom }}</h1>
+<p class="page-subtitle">{{ etablissement.ville }} · Code {{ etablissement.code }}</p>
+
+<h2>Classes</h2>
+<table class="card-table">
+    <thead><tr><th>Nom</th><th>Niveau</th><th>Effectif</th></tr></thead>
+    <tbody>
+    {% for classe in etablissement.classes %}
+        <tr><td>{{ classe.nom }}</td><td>{{ classe.niveau }}</td><td>{{ classe.eleves|length }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>Comptes rattachés</h2>
+<table class="card-table">
+    <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th></tr></thead>
+    <tbody>
+    {% for compte in comptes %}
+        <tr><td>{{ compte.nomComplet }}</td><td>{{ compte.email }}</td><td>{{ compte.rolePrincipal|replace({'ROLE_': ''}) }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

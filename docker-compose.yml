@@ -1,0 +1,72 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: gose_php
+    volumes:
+      - ./:/var/www/html
+      # Volume nommé dédié à vendor/ : sans lui, le bind mount ci-dessus (répertoire
+      # du projet sur l'hôte, où vendor/ n'existe pas) masquerait le vendor/ installé
+      # PENDANT le build de l'image (composer install). Docker initialise ce volume
+      # nommé avec le contenu de l'image au premier démarrage.
+      - gose_vendor:/var/www/html/vendor
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql://gose:gose@mysql:3306/gose_bulletins?serverVersion=8.0&charset=utf8mb4"
+    networks:
+      - gose_net
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: gose_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - gose_net
+
+  mysql:
+    image: mysql:8.0
+    container_name: gose_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gose_bulletins
+      MYSQL_USER: gose
+      MYSQL_PASSWORD: gose
+    ports:
+      - "3307:3306"
+    volumes:
+      - gose_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - gose_net
+
+  adminer:
+    image: adminer:latest
+    container_name: gose_adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+    networks:
+      - gose_net
+
+networks:
+  gose_net:
+    driver: bridge
+
+volumes:
+  gose_mysql_data:
+  gose_vendor:

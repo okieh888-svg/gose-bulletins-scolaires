@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes classes — GOSE{% endblock %}
+{% block body %}
+<h1>Mes classes</h1>
+<p class="page-subtitle">Classes et matières qui vous sont affectées.</p>
+
+<div class="card-grid">
+    {% for classe in classes %}
+        <div class="card">
+            <h3>{{ classe.nom }}</h3>
+            <p class="page-subtitle">{{ classe.niveau }} · {{ classe.eleves|length }} élève(s) · {{ classe.anneeScolaire }}</p>
+            <a class="lien-liste" href="{{ path('app_enseignant_classe', {id: classe.id}) }}">Ouvrir la classe →</a>
+        </div>
+    {% else %}
+        <p>Aucune classe ne vous est actuellement affectée.</p>
+    {% endfor %}
+</div>
+{% endblock %}

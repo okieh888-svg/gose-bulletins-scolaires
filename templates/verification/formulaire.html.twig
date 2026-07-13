@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Vérification d'authenticité — GOSE{% endblock %}
+{% block body %}
+<div class="verif-wrap">
+    <div class="verif-card">
+        <h1>Vérifier un bulletin</h1>
+        <p class="page-subtitle">
+            Saisissez le code de vérification imprimé sur le bulletin (ou scannez son QR code)
+            pour confirmer son authenticité auprès du système GOSE.
+        </p>
+
+        <form method="get" action="{{ path('app_verification_index') }}">
+            <label for="code">Code de vérification</label>
+            <input type="text" name="code" id="code" placeholder="ex : a1b2c3d4e5f6..." required autofocus>
+            <button class="btn" type="submit" style="margin-top:1rem;width:100%;">Vérifier</button>
+        </form>
+
+        <p class="page-subtitle" style="margin-top:1.4rem;font-size:0.75rem;">
+            Cette page est accessible sans compte GOSE : c'est volontaire, pour permettre à un
+            tiers (employeur, autre établissement...) de vérifier un document. Seules les
+            informations de synthèse sont affichées, jamais le détail des notes.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto # bcrypt/argon2id selon la lib dispo dans le conteneur
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            custom_authenticator: App\Security\AppAuthenticator
+            entry_point: App\Security\AppAuthenticator
+            logout:
+                path: app_logout
+                target: app_login
+            # Déconnexion automatique après inactivité : la session expire après
+            # gose.duree_inactivite_max secondes (voir framework.yaml: session.gc_maxlifetime)
+            # et remember_me est volontairement désactivé pour un environnement scolaire partagé.
+
+    access_control:
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/css, roles: PUBLIC_ACCESS }
+        # Vérification d'authenticité d'un bulletin : volontairement publique, sans
+        # compte GOSE (voir App\Controller\VerificationController pour la justification).
+        - { path: ^/verification, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        # Volontairement PAS ouvert à ROLE_ADMIN : les tableaux de bord proviseur/
+        # enseignant/élève supposent un profil (établissement, Enseignant, Eleve)
+        # que l'admin n'a pas. L'admin dispose de son propre espace (/admin) ;
+        # il n'est pas censé "se faire passer" pour un autre rôle.
+        - { path: ^/proviseur, roles: ROLE_PROVISEUR }
+        - { path: ^/enseignant, roles: ROLE_ENSEIGNANT }
+        - { path: ^/eleve, roles: ROLE_ELEVE }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+
+when@test:
+    security:
+        password_hashers:
+            App\Entity\User:
+                algorithm: auto
+                cost: 4 # hachage rapide pendant les tests uniquement

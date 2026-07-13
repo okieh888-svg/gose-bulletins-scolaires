@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes notes — GOSE{% endblock %}
+{% block body %}
+<h1>Mes notes</h1>
+<p class="page-subtitle">{{ eleve.nomComplet }} — lecture seule.</p>
+
+<div class="card">
+    {% for p in periodes %}
+        <a class="btn btn-sm {{ periodeSelectionnee and periodeSelectionnee.id == p.id ? '' : 'btn-secondaire' }}"
+           href="{{ path('app_eleve_notes', {periode: p.id}) }}">{{ p.nom }}</a>
+    {% endfor %}
+</div>
+
+<table class="card-table">
+    <thead><tr><th>Matière</th><th>Note</th><th>Type</th><th>Date de saisie</th></tr></thead>
+    <tbody>
+    {% for note in notes %}
+        <tr>
+            <td>{{ note.matiere.nom }}</td>
+            <td class="note-eleve {{ note.valeur < 10 ? 'faible' : (note.valeur >= 14 ? 'forte' : '') }}">{{ note.valeur }}/20</td>
+            <td>{{ note.typeEvaluation }}</td>
+            <td>{{ note.dateSaisie|date('d/m/Y') }}</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="4">Aucune note pour cette période.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

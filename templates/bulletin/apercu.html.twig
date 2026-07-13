@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block title %}Bulletin — {{ bulletin.eleve.nomComplet }}{% endblock %}
+{% block body %}
+<div class="bulletin-actions">
+    <a class="btn" href="{{ path('app_bulletin_pdf', {id: bulletin.id}) }}" target="_blank">Générer le PDF (français)</a>
+    <a class="btn btn-secondaire" href="{{ path('app_bulletin_pdf_arabe', {id: bulletin.id}) }}" target="_blank">نسخة عربية (PDF arabe)</a>
+</div>
+
+<div class="bulletin-doc">
+    <div class="bulletin-entete">
+        <div class="bulletin-logo"><img src="{{ asset('images/logo-menfop.jpg') }}" alt="Logo MENFOP"></div>
+        <div class="bulletin-etab">
+            <div class="nom">{{ bulletin.eleve.classe.etablissement.nom }}</div>
+            <div>{{ bulletin.eleve.classe.etablissement.ville }}</div>
+            <div>République de Djibouti — MENFOP</div>
+        </div>
+    </div>
+
+    <div class="bulletin-titre">
+        <h2>BULLETIN SCOLAIRE — {{ bulletin.periode.nom|upper }}</h2>
+        <div class="page-subtitle">Année scolaire {{ bulletin.periode.anneeScolaire }}</div>
+    </div>
+
+    <div class="bulletin-infos">
+        <div>
+            <strong>{{ bulletin.eleve.nomComplet }}</strong>{% if bulletin.eleve.nomArabe %} <span dir="rtl">/ {{ bulletin.eleve.nomArabe }}</span>{% endif %}<br>
+            Matricule : {{ bulletin.eleve.matricule }}<br>
+            Né(e) le {{ bulletin.eleve.dateNaissance|date('d/m/Y') }}
+        </div>
+        <div>
+            Classe : {{ bulletin.eleve.classe.nom }}<br>
+            Statut : <span class="badge badge-{{ bulletin.statut.couleurBadge }}">{{ bulletin.statut.libelle }}</span><br>
+            Généré le {{ bulletin.dateGeneration|date('d/m/Y à H:i') }}
+        </div>
+    </div>
+
+    <table class="card-table">
+        <thead>
+            <tr><th>Matière</th><th>Coef.</th><th>Moyenne /20</th><th>Moyenne × coef.</th><th>Appréciation</th></tr>
+        </thead>
+        <tbody>
+        {% for ligne in bulletin.lignes %}
+            <tr>
+                <td>{{ ligne.matiere.nom }}</td>
+                <td>{{ ligne.coefficient }}</td>
+                <td>{{ ligne.moyenne }}</td>
+                <td>{{ ligne.moyenneCoefficientee }}</td>
+                <td>{{ ligne.appreciation }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="bulletin-synthese">
+        <div class="stat-tile"><div class="valeur">{{ bulletin.moyenneGenerale ?? '—' }}</div><div class="label">Moyenne générale /20</div></div>
+        <div class="stat-tile"><div class="valeur">{{ bulletin.rangAffiche }}</div><div class="label">Rang de classe</div></div>
+        <div class="stat-tile"><div class="valeur">{{ bulletin.appreciationGenerale ?? '—' }}</div><div class="label">Appréciation générale</div></div>
+    </div>
+
+    <div class="bulletin-signatures">
+        <div>Signature de l'enseignant<br><small>{{ bulletin.valideParEnseignant ? bulletin.valideParEnseignant.nomComplet : '(en attente)' }}</small></div>
+        <div>Signature du chef d'établissement<br><small>{{ bulletin.publieParProviseur ? bulletin.publieParProviseur.nomComplet : '(en attente)' }}</small></div>
+    </div>
+
+    {% if qrCodeDataUri %}
+    <div class="bulletin-verif">
+        <img src="{{ qrCodeDataUri }}" alt="QR code de vérification" width="80" height="80">
+        <div class="bulletin-verif-texte">
+            <strong>Vérification d'authenticité</strong><br>
+            Code : <code>{{ bulletin.codeVerification }}</code><br>
+            <a class="lien-liste" href="{{ verificationUrl }}" target="_blank">{{ verificationUrl }}</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}Établissement — GOSE{% endblock %}
+{% block body %}
+<h1>{{ etablissement.nom }}</h1>
+<p class="page-subtitle">{{ etablissement.ville }} · Tableau de bord proviseur</p>
+
+<div class="card-grid">
+    <div class="stat-tile"><div class="valeur">{{ nbClasses }}</div><div class="label">Classes</div></div>
+    <div class="stat-tile"><div class="valeur">{{ nbElevesTotal }}</div><div class="label">Élèves</div></div>
+    <div class="stat-tile"><div class="valeur">{{ nbEnAttente }}</div><div class="label">Bulletins en attente</div></div>
+</div>
+
+<h2>Classes</h2>
+<table class="card-table">
+    <thead><tr><th>Classe</th><th>Niveau</th><th>Effectif</th></tr></thead>
+    <tbody>
+    {% for classe in classes %}
+        <tr><td>{{ classe.nom }}</td><td>{{ classe.niveau }}</td><td>{{ classe.eleves|length }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<p><a class="lien-liste" href="{{ path('app_proviseur_bulletins') }}">Voir la file des bulletins à publier →</a></p>
+{% endblock %}

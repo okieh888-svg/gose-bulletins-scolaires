@@ -1,0 +1,40 @@
+LICENCE — PROTOTYPE DE DÉMONSTRATION TECHNIQUE
+GOSE — Module de génération des bulletins scolaires
+
+Copyright (c) 2026 — Réalisé dans le cadre d'une manifestation d'intérêt
+adressée au Ministère de l'Éducation Nationale et de la Formation
+Professionnelle (MENFOP) de la République de Djibouti.
+
+1. OBJET
+Ce dépôt constitue une PREUVE DE CAPACITÉ TECHNIQUE ("le Logiciel"), fournie
+à titre de démonstration dans le cadre d'un processus de sélection ou d'appel
+à manifestation d'intérêt relatif à la plateforme GOSE (Gestion des
+Établissements Scolaires).
+
+2. PROPRIÉTÉ
+Sauf accord contraire écrit, le Logiciel et l'ensemble de ses composants
+(code source, gabarits, jeux de données de démonstration, documentation) sont
+destinés à être mis à la disposition du MENFOP dans le cadre strict de
+l'évaluation de la présente manifestation d'intérêt.
+
+3. DONNÉES
+Le Logiciel est livré avec un jeu de données exclusivement FICTIF
+(établissements, personnels, élèves, notes). Aucune donnée réelle, aucune
+donnée à caractère personnel réelle, et en particulier aucune donnée
+concernant un mineur réel, n'est contenue dans ce dépôt.
+
+4. USAGE AUTORISÉ
+L'évaluation, l'exécution locale, l'audit du code source et les tests du
+Logiciel par le MENFOP ou ses représentants dans le cadre de la présente
+manifestation d'intérêt sont autorisés sans restriction.
+
+Toute autre utilisation (mise en production, redistribution, usage
+commercial par un tiers, réutilisation en dehors du cadre de cette
+manifestation d'intérêt) requiert l'accord écrit préalable de l'auteur.
+
+5. ABSENCE DE GARANTIE
+LE LOGICIEL EST FOURNI "EN L'ÉTAT", SANS GARANTIE D'AUCUNE SORTE, EXPRESSE OU
+IMPLICITE, Y COMPRIS MAIS SANS S'Y LIMITER LES GARANTIES DE QUALITÉ MARCHANDE,
+D'ADÉQUATION À UN USAGE PARTICULIER ET D'ABSENCE DE CONTREFAÇON. IL S'AGIT
+D'UN PROTOTYPE DE DÉMONSTRATION, NON DESTINÉ À UN USAGE EN PRODUCTION EN
+L'ÉTAT.

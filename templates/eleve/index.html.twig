@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes bulletins — GOSE{% endblock %}
+{% block body %}
+<h1>Mes bulletins</h1>
+<p class="page-subtitle">{{ eleve.nomComplet }} — {{ eleve.classe.nom }} · Seuls les bulletins publiés apparaissent ici.</p>
+
+<div class="card-grid">
+    {% for bulletin in bulletins %}
+        <div class="card">
+            <h3>{{ bulletin.periode.nom }}</h3>
+            <p>Moyenne générale : <strong>{{ bulletin.moyenneGenerale }}/20</strong></p>
+            <p>Rang : {{ bulletin.rangAffiche }}</p>
+            <p>{{ bulletin.appreciationGenerale }}</p>
+            <a class="lien-liste" href="{{ path('app_bulletin_apercu', {id: bulletin.id}) }}">Voir le bulletin →</a>
+        </div>
+    {% else %}
+        <p>Aucun bulletin publié pour le moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

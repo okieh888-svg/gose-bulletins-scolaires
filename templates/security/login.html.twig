@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title %}Connexion — GOSE{% endblock %}
+{% block body %}
+<div class="login-wrap">
+    <div class="login-card">
+        <h1>GOSE</h1>
+        <p class="page-subtitle">Module Bulletins scolaires — connexion</p>
+
+        {% if error %}
+            <div class="flash flash-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form method="post">
+            <label for="email">Adresse e-mail</label>
+            <input type="email" value="{{ last_email }}" name="email" id="email" autocomplete="email" required autofocus>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" autocomplete="current-password" required>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="btn" type="submit">Se connecter</button>
+        </form>
+
+        <div class="comptes-demo">
+            <strong>Comptes de démonstration</strong> (données 100% fictives) :
+            <table>
+                <tr><th>Rôle</th><th>Email</th><th>Mot de passe</th></tr>
+                <tr><td>Admin</td><td>admin@gose.dj</td><td>Demo123!</td></tr>
+                <tr><td>Proviseur (Lycée de Balbala)</td><td>proviseur.balbala@gose.dj</td><td>Demo123!</td></tr>
+                <tr><td>Proviseur (Collège d'Arta)</td><td>proviseur.arta@gose.dj</td><td>Demo123!</td></tr>
+                <tr><td>Enseignant</td><td>ens.mahamoud@gose.dj</td><td>Demo123!</td></tr>
+                <tr><td>Élève</td><td>eleve.hibo@gose.dj</td><td>Demo123!</td></tr>
+            </table>
+            <p>Liste complète dans le README du dépôt.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # Injection explicite du barème d'appréciation (paramètre externalisé, cf gose.yaml)
+    App\Service\AppreciationService:
+        arguments:
+            $bareme: '%gose.bareme_appreciation%'
+
+    App\Service\MoyenneCalculator:
+        arguments:
+            $precision: '%gose.precision_moyenne%'
+
+    # Chemin du logo de l'établissement (placeholder unique pour ce prototype),
+    # utilisé par PdfGenerator pour l'embarquer en base64 dans le PDF (dompdf).
+    App\Service\PdfGenerator:
+        arguments:
+            $logoPath: '%kernel.project_dir%/public/images/logo-menfop.jpg'

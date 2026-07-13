@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouveau compte — Admin{% endblock %}
+{% block body %}
+<h1>Nouveau compte</h1>
+<div class="card">
+    {{ form_start(form, {attr: {class: 'formulaire-classique'}}) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.rolePrincipal) }}
+        {{ form_row(form.etablissement) }}
+        {{ form_row(form.motDePasse) }}
+        <div class="form-actions">
+            <button class="btn" type="submit">Créer le compte</button>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

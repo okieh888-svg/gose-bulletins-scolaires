@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ classe.nom }} — GOSE{% endblock %}
+{% block body %}
+<h1>{{ classe.nom }}</h1>
+<p class="page-subtitle">{{ classe.niveau }} · {{ classe.anneeScolaire }} · {{ classe.etablissement.nom }}</p>
+
+<h2>Période</h2>
+<div class="card">
+    {% for p in periodes %}
+        <a class="btn btn-sm {{ periodeSelectionnee and periodeSelectionnee.id == p.id ? '' : 'btn-secondaire' }}"
+           href="{{ path('app_enseignant_classe', {id: classe.id, periode: p.id}) }}">{{ p.nom }}</a>
+    {% endfor %}
+</div>
+
+<h2>Saisie des notes ({{ periodeSelectionnee ? periodeSelectionnee.nom : '—' }})</h2>
+<div class="card">
+    {% for affectation in affectations %}
+        <a class="lien-liste" style="margin-right: 1.2rem;"
+           href="{{ path('app_enseignant_notes', {classeId: classe.id, matiereId: affectation.matiere.id, periodeId: periodeSelectionnee.id}) }}">
+            {{ affectation.matiere.nom }} (coef. {{ affectation.matiere.coefficient }})
+        </a>
+    {% else %}
+        <p>Aucune matière affectée dans cette classe.</p>
+    {% endfor %}
+</div>
+
+<h2>Bulletins — {{ periodeSelectionnee ? periodeSelectionnee.nom : '—' }}</h2>
+<table class="card-table">
+    <thead>
+        <tr>
+            <th>Élève</th>
+            <th>Moyenne générale (calculée)</th>
+            <th>Statut bulletin</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for eleve in classe.eleves %}
+        {% set donnees = moyennesClasse[eleve.id] ?? null %}
+        {% set bulletin = bulletinsExistants[eleve.id] ?? null %}
+        <tr>
+            <td>{{ eleve.nomComplet }}{% if eleve.nomArabe %} <span dir="rtl">({{ eleve.nomArabe }})</span>{% endif %}</td>
+            <td>{{ donnees and donnees.moyenneGenerale is not null ? donnees.moyenneGenerale : '—' }}</td>
+            <td>
+                {% if bulletin %}
+                    <span class="badge badge-{{ bulletin.statut.couleurBadge }}">{{ bulletin.statut.libelle }}</span>
+                {% else %}
+                    <span class="badge badge-gris">Aucun bulletin</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if periodeSelectionnee %}
+                <form method="post" style="display:inline"
+                      action="{{ path('app_enseignant_bulletin_generer', {eleveId: eleve.id, periodeId: periodeSelectionnee.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('generer_bulletin_' ~ eleve.id) }}">
+                    <button class="btn btn-sm btn-secondaire" type="submit">{{ bulletin ? 'Régénérer' : 'Générer' }}</button>
+                </form>
+                {% if bulletin and bulletin.statut.value == 'brouillon' %}
+                <form method="post" style="display:inline"
+                      action="{{ path('app_enseignant_bulletin_valider', {id: bulletin.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('valider_bulletin_' ~ bulletin.id) }}">
+                    <button class="btn btn-sm btn-valider" type="submit">Valider</button>
+                </form>
+                {% endif %}
+                {% if bulletin %}
+                    <a class="btn btn-sm" href="{{ path('app_bulletin_apercu', {id: bulletin.id}) }}">Aperçu</a>
+                {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

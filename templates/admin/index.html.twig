@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title %}Administration — GOSE{% endblock %}
+{% block body %}
+<h1>Administration</h1>
+<p class="page-subtitle">Vue globale multi-établissements (réservée à ROLE_ADMIN).</p>
+
+<p><a class="btn" href="{{ path('app_admin_compte_nouveau') }}">+ Nouveau compte (tout établissement/rôle)</a></p>
+
+<h2>Établissements</h2>
+<table class="card-table">
+    <thead><tr><th>Nom</th><th>Ville</th><th>Code</th><th>Classes</th></tr></thead>
+    <tbody>
+    {% for etab in etablissements %}
+        <tr>
+            <td><a class="lien-liste" href="{{ path('app_admin_etablissement', {id: etab.id}) }}">{{ etab.nom }}</a></td>
+            <td>{{ etab.ville }}</td>
+            <td>{{ etab.code }}</td>
+            <td>{{ etab.classes|length }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>Journal d'accès (30 dernières entrées)</h2>
+<table class="card-table">
+    <thead><tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Cible</th><th>IP</th></tr></thead>
+    <tbody>
+    {% for entree in journal %}
+        <tr>
+            <td>{{ entree.dateAction|date('d/m/Y H:i:s') }}</td>
+            <td>{{ entree.utilisateur ? entree.utilisateur.nomComplet : '—' }}</td>
+            <td>{{ entree.action }}</td>
+            <td>{{ entree.cible ?? '—' }}</td>
+            <td>{{ entree.adresseIp ?? '—' }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

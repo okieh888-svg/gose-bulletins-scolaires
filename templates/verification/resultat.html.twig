@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block title %}Résultat de vérification — GOSE{% endblock %}
+{% block body %}
+<div class="verif-wrap">
+    <div class="verif-card">
+        {% if bulletin %}
+            <div class="verif-statut verif-ok">✓ Bulletin authentique</div>
+
+            <h1>{{ bulletin.eleve.nomComplet }}</h1>
+            <p class="page-subtitle">{{ bulletin.eleve.classe.etablissement.nom }} — {{ bulletin.eleve.classe.nom }}</p>
+
+            <table class="card-table" style="margin-top:1rem;">
+                <tr><th>Période</th><td>{{ bulletin.periode.nom }} ({{ bulletin.periode.anneeScolaire }})</td></tr>
+                <tr><th>Moyenne générale</th><td>{{ bulletin.moyenneGenerale }}/20</td></tr>
+                <tr><th>Rang de classe</th><td>{{ bulletin.rangAffiche }}</td></tr>
+                <tr><th>Appréciation</th><td>{{ bulletin.appreciationGenerale }}</td></tr>
+                <tr><th>Statut</th><td><span class="badge badge-{{ bulletin.statut.couleurBadge }}">{{ bulletin.statut.libelle }}</span></td></tr>
+                <tr><th>Publié le</th><td>{{ bulletin.datePublication|date('d/m/Y à H:i') }}</td></tr>
+                <tr><th>Publié par</th><td>{{ bulletin.publieParProviseur ? bulletin.publieParProviseur.nomComplet : '—' }}</td></tr>
+            </table>
+
+            <p class="page-subtitle" style="margin-top:1rem;font-size:0.75rem;">
+                Ces informations proviennent directement de la base GOSE et correspondent au
+                bulletin officiellement publié pour cette période. Le détail des notes par
+                matière n'est volontairement pas affiché sur cette page publique.
+            </p>
+        {% else %}
+            <div class="verif-statut verif-ko">✕ Code invalide</div>
+            <h1>Aucun bulletin authentique ne correspond à ce code</h1>
+            <p class="page-subtitle">
+                Soit le code est incorrect, soit il ne correspond à aucun bulletin publié
+                (un bulletin en brouillon n'est jamais vérifiable). Vérifiez la saisie ou
+                contactez l'établissement concerné.
+            </p>
+        {% endif %}
+
+        <p style="margin-top:1.4rem;"><a class="lien-liste" href="{{ path('app_verification_index') }}">← Vérifier un autre code</a></p>
+    </div>
+</div>
+{% endblock %}

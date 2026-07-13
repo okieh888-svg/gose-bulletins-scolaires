@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}GOSE — Bulletins scolaires{% endblock %}</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/logo-menfop.jpg') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+<body>
+    {% if app.user %}
+    <header class="topbar">
+        <div class="topbar-brand">
+            <span class="topbar-logo">GOSE</span>
+            <span class="topbar-subtitle">Bulletins scolaires — MENFOP Djibouti</span>
+        </div>
+        <nav class="topbar-nav">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin_index') }}">Administration</a>
+            {% endif %}
+            {% if is_granted('ROLE_PROVISEUR') %}
+                <a href="{{ path('app_proviseur_index') }}">Établissement</a>
+                <a href="{{ path('app_proviseur_bulletins') }}">Bulletins à publier</a>
+                <a href="{{ path('app_proviseur_statistiques') }}">Statistiques</a>
+                <a href="{{ path('app_proviseur_comptes') }}">Comptes</a>
+            {% endif %}
+            {% if is_granted('ROLE_ENSEIGNANT') %}
+                <a href="{{ path('app_enseignant_index') }}">Mes classes</a>
+            {% endif %}
+            {% if is_granted('ROLE_ELEVE') %}
+                <a href="{{ path('app_eleve_index') }}">Mes bulletins</a>
+                <a href="{{ path('app_eleve_notes') }}">Mes notes</a>
+            {% endif %}
+        </nav>
+        <div class="topbar-user">
+            <span class="user-badge">{{ app.user.nomComplet }} · {{ app.user.rolePrincipal|replace({'ROLE_': ''})|lower|capitalize }}</span>
+            <a href="{{ path('app_logout') }}" class="btn-link">Déconnexion</a>
+        </div>
+    </header>
+    {% endif %}
+
+    <main class="page">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        Prototype de démonstration technique — GOSE / MENFOP — Données 100% fictives, aucun mineur réel.
+    </footer>
+</body>
+</html>

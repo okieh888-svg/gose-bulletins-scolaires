@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block title %}Statistiques — GOSE{% endblock %}
+{% block body %}
+<h1>Statistiques — {{ etablissement.nom }}</h1>
+<p class="page-subtitle">Calculées uniquement sur les bulletins publiés.</p>
+
+<table class="card-table">
+    <thead><tr><th>Classe</th><th>Effectif</th><th>Bulletins publiés</th><th>Moyenne de classe</th></tr></thead>
+    <tbody>
+    {% for ligne in statsParClasse %}
+        <tr>
+            <td>{{ ligne.classe.nom }}</td>
+            <td>{{ ligne.effectif }}</td>
+            <td>{{ ligne.nbBulletinsPublies }}</td>
+            <td>{{ ligne.moyenneClasse ?? '—' }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

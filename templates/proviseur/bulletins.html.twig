@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block title %}Bulletins à valider — GOSE{% endblock %}
+{% block body %}
+<h1>File des bulletins</h1>
+<p class="page-subtitle">Bulletins en brouillon ou validés par l'enseignant, en attente de publication.</p>
+
+<table class="card-table">
+    <thead>
+        <tr><th>Élève</th><th>Classe</th><th>Période</th><th>Moyenne</th><th>Statut</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    {% for bulletin in bulletins %}
+        <tr>
+            <td>{{ bulletin.eleve.nomComplet }}</td>
+            <td>{{ bulletin.eleve.classe.nom }}</td>
+            <td>{{ bulletin.periode.nom }}</td>
+            <td>{{ bulletin.moyenneGenerale ?? '—' }}</td>
+            <td><span class="badge badge-{{ bulletin.statut.couleurBadge }}">{{ bulletin.statut.libelle }}</span></td>
+            <td>
+                <a class="btn btn-sm" href="{{ path('app_bulletin_apercu', {id: bulletin.id}) }}">Aperçu</a>
+                {% if bulletin.statut.value == 'valide_enseignant' %}
+                <form method="post" style="display:inline" action="{{ path('app_proviseur_bulletin_publier', {id: bulletin.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('publier_bulletin_' ~ bulletin.id) }}">
+                    <button class="btn btn-sm btn-publier" type="submit">Publier</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="6">Aucun bulletin en attente.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

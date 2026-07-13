@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Comptes — GOSE{% endblock %}
+{% block body %}
+<h1>Comptes utilisateurs</h1>
+<p class="page-subtitle">Comptes de votre établissement uniquement.</p>
+
+<p><a class="btn" href="{{ path('app_proviseur_compte_nouveau') }}">+ Nouveau compte</a></p>
+
+<table class="card-table">
+    <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Actif</th></tr></thead>
+    <tbody>
+    {% for compte in comptes %}
+        <tr>
+            <td>{{ compte.nomComplet }}</td>
+            <td>{{ compte.email }}</td>
+            <td>{{ compte.rolePrincipal|replace({'ROLE_': ''}) }}</td>
+            <td>{{ compte.actif ? 'Oui' : 'Non' }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

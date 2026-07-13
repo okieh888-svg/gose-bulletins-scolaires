@@ -1,0 +1,23 @@
+# Paramètres métier propres au module Bulletins GOSE.
+# Le barème d'appréciation est volontairement externalisé ici (et non codé en dur
+# dans le service) afin d'être ajustable par établissement/politique académique
+# sans toucher au code de App\Service\AppreciationService.
+parameters:
+    # Barème appliqué à la moyenne générale ET à la moyenne par matière.
+    # Liste ordonnée du seuil le plus haut au plus bas ; le premier seuil atteint gagne.
+    gose.bareme_appreciation:
+        - { seuil: 16, libelle: 'Excellent', libelle_ar: 'ممتاز' }
+        - { seuil: 14, libelle: 'Très bien', libelle_ar: 'جيد جدا' }
+        - { seuil: 12, libelle: 'Bien', libelle_ar: 'جيد' }
+        - { seuil: 10, libelle: 'Assez bien', libelle_ar: 'مقبول' }
+        - { seuil: 8,  libelle: 'Passable', libelle_ar: 'ضعيف' }
+        - { seuil: 0,  libelle: 'Insuffisant', libelle_ar: 'ضعيف جدا' }
+
+    # Nombre de décimales utilisées pour l'affichage des moyennes sur le bulletin.
+    gose.precision_moyenne: 2
+
+    # Nom de l'année scolaire par défaut utilisé par les fixtures et les écrans de saisie.
+    gose.annee_scolaire_courante: '2025-2026'
+
+    # Durée d'inactivité (en secondes) avant déconnexion automatique.
+    gose.duree_inactivite_max: 1800
