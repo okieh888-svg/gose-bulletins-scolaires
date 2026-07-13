@@ -10,6 +10,12 @@
 > réelle. **Aucune donnée réelle d'élève (mineur) n'est utilisée**, ni ici ni
 > dans aucun jeu de fixtures livré avec ce prototype.
 
+![Démo GOSE Bulletins](screenshots/demo.gif)
+
+**Démo en ligne :** http://37.27.205.69:8080 — comptes de test en section 5
+ci-dessous (mot de passe unique : `Demo123!`). Parcours pas à pas suggéré en
+section 8.
+
 ## 1. Contexte et périmètre
 
 Ce dépôt répond à la partie du TDR portant sur le **module « Bulletins
