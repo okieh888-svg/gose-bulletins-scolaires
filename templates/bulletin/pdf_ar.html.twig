@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>كشف النقاط {{ bulletin.eleve.nomComplet }}</title>
+<title>{{ ("كشف النقاط " ~ bulletin.eleve.nomComplet)|ar_glyphs }}</title>
 <style>
     /*
      * Variante arabe (RTL) du bulletin — démonstration du bilinguisme requis
@@ -44,44 +44,50 @@
     <div class="entete">
         <div class="etab">
             <div class="nom">{{ bulletin.eleve.classe.etablissement.nom }}</div>
-            <div>{{ bulletin.eleve.classe.etablissement.ville }} — جمهورية جيبوتي</div>
-            <div>وزارة التربية الوطنية والتكوين المهني</div>
+            <div>{{ (bulletin.eleve.classe.etablissement.ville ~ " — جمهورية جيبوتي")|ar_glyphs }}</div>
+            <div>{{ "وزارة التربية الوطنية والتكوين المهني"|ar_glyphs }}</div>
         </div>
-        <div class="logo"><div class="logo-cercle">{% if logoDataUri %}<img src="{{ logoDataUri }}" alt="شعار MENFOP">{% else %}شعار<br>المؤسسة{% endif %}</div></div>
+        <div class="logo"><div class="logo-cercle">{% if logoDataUri %}<img src="{{ logoDataUri }}" alt="شعار MENFOP">{% else %}{{ "شعار"|ar_glyphs }}<br>{{ "المؤسسة"|ar_glyphs }}{% endif %}</div></div>
     </div>
 
     <div class="titre">
-        <h1>كشف النقاط — {{ bulletin.periode.nom }}</h1>
-        <div class="sous">السنة الدراسية {{ bulletin.periode.anneeScolaire }}</div>
+        <h1>{{ ("كشف النقاط — " ~ bulletin.periode.nom)|ar_glyphs }}</h1>
+        <div class="sous">{{ ("السنة الدراسية " ~ bulletin.periode.anneeScolaire)|ar_glyphs }}</div>
     </div>
 
     <table class="infos">
         <tr>
             <td>
-                <strong>{{ bulletin.eleve.nomArabe ?? bulletin.eleve.nomComplet }}</strong><br>
-                رقم التسجيل : {{ bulletin.eleve.matricule }}<br>
-                تاريخ الازدياد : {{ bulletin.eleve.dateNaissance|date('d/m/Y') }}
+                <strong>{{ (bulletin.eleve.nomArabe ?? bulletin.eleve.nomComplet)|ar_glyphs }}</strong><br>
+                {{ ("رقم التسجيل : " ~ bulletin.eleve.matricule)|ar_glyphs }}<br>
+                {{ ("تاريخ الازدياد : " ~ bulletin.eleve.dateNaissance|date('d/m/Y'))|ar_glyphs }}
             </td>
             <td>
-                القسم : {{ bulletin.eleve.classe.nom }}<br>
-                حالة الكشف : <span class="badge">{{ bulletin.statut.libelle }}</span><br>
-                تاريخ الإصدار : {{ "now"|date('d/m/Y') }}
+                {{ ("القسم : " ~ bulletin.eleve.classe.nom)|ar_glyphs }}<br>
+                {{ "حالة الكشف :"|ar_glyphs }} <span class="badge">{{ bulletin.statut.libelle }}</span><br>
+                {{ ("تاريخ الإصدار : " ~ ("now"|date('d/m/Y')))|ar_glyphs }}
             </td>
         </tr>
     </table>
 
     <table class="notes">
         <thead>
-            <tr><th>المادة</th><th>المعامل</th><th>المعدل /20</th><th>المعدل × المعامل</th><th>الملاحظة</th></tr>
+            <tr>
+                <th>{{ "المادة"|ar_glyphs }}</th>
+                <th>{{ "المعامل"|ar_glyphs }}</th>
+                <th>{{ "المعدل /20"|ar_glyphs }}</th>
+                <th>{{ "المعدل × المعامل"|ar_glyphs }}</th>
+                <th>{{ "الملاحظة"|ar_glyphs }}</th>
+            </tr>
         </thead>
         <tbody>
         {% for ligne in bulletin.lignes %}
             <tr>
-                <td>{{ ligne.matiere.nomArabe ?? ligne.matiere.nom }}</td>
+                <td>{{ (ligne.matiere.nomArabe ?? ligne.matiere.nom)|ar_glyphs }}</td>
                 <td>{{ ligne.coefficient }}</td>
                 <td>{{ ligne.moyenne }}</td>
                 <td>{{ ligne.moyenneCoefficientee }}</td>
-                <td>{{ appreciationsArabeLignes[ligne.id] ?? ligne.appreciation }}</td>
+                <td>{{ (appreciationsArabeLignes[ligne.id] ?? ligne.appreciation)|ar_glyphs }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -89,33 +95,33 @@
 
     <table class="synthese">
         <tr>
-            <td><div class="valeur">{{ bulletin.moyenneGenerale ?? '—' }}/20</div><div class="label">المعدل العام</div></td>
-            <td><div class="valeur">{{ bulletin.rangAffiche }}</div><div class="label">الرتبة داخل القسم</div></td>
-            <td><div class="valeur">{{ appreciationGeneraleArabe ?? bulletin.appreciationGenerale ?? '—' }}</div><div class="label">الملاحظة العامة</div></td>
+            <td><div class="valeur">{{ bulletin.moyenneGenerale ?? '—' }}/20</div><div class="label">{{ "المعدل العام"|ar_glyphs }}</div></td>
+            <td><div class="valeur">{{ bulletin.rangAffiche }}</div><div class="label">{{ "الرتبة داخل القسم"|ar_glyphs }}</div></td>
+            <td><div class="valeur">{{ (appreciationGeneraleArabe ?? bulletin.appreciationGenerale ?? '—')|ar_glyphs }}</div><div class="label">{{ "الملاحظة العامة"|ar_glyphs }}</div></td>
         </tr>
     </table>
 
     <table class="signatures">
         <tr>
-            <td>توقيع الأستاذ(ة)<br>{{ bulletin.valideParEnseignant ? bulletin.valideParEnseignant.nomComplet : '' }}</td>
-            <td>توقيع مدير(ة) المؤسسة<br>{{ bulletin.publieParProviseur ? bulletin.publieParProviseur.nomComplet : '' }}</td>
+            <td>{{ "توقيع الأستاذ(ة)"|ar_glyphs }}<br>{{ bulletin.valideParEnseignant ? bulletin.valideParEnseignant.nomComplet : '' }}</td>
+            <td>{{ "توقيع مدير(ة) المؤسسة"|ar_glyphs }}<br>{{ bulletin.publieParProviseur ? bulletin.publieParProviseur.nomComplet : '' }}</td>
         </tr>
     </table>
 
     {% if qrCodeDataUri %}
     <div class="verif-bloc">
         <div class="texte">
-            <strong>التحقق من صحة الوثيقة</strong><br>
-            امسح رمز QR أو زر الرابط التالي:<br>
+            <strong>{{ "التحقق من صحة الوثيقة"|ar_glyphs }}</strong><br>
+            {{ "امسح رمز QR أو زر الرابط التالي:"|ar_glyphs }}<br>
             {{ verificationUrl }}<br>
-            الرمز : <span class="code">{{ bulletin.codeVerification }}</span>
+            {{ "الرمز :"|ar_glyphs }} <span class="code">{{ bulletin.codeVerification }}</span>
         </div>
         <div class="qr"><img src="{{ qrCodeDataUri }}" width="65" height="65"></div>
     </div>
     {% endif %}
 
     <div class="footer-note">
-        وثيقة صادرة عن نظام GOSE — نموذج تجريبي للعرض التقني. بيانات وهمية بالكامل، لا يوجد أي قاصر حقيقي.
+        {{ "وثيقة صادرة عن نظام GOSE — نموذج تجريبي للعرض التقني. بيانات وهمية بالكامل، لا يوجد أي قاصر حقيقي."|ar_glyphs }}
     </div>
 </body>
 </html>
