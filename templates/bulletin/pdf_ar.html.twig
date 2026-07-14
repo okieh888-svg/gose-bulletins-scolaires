@@ -38,6 +38,10 @@
     .verif-bloc .texte { display: table-cell; vertical-align: middle; font-size: 8.5px; color: #667085; padding-right: 10px; }
     .verif-bloc .texte strong { color: #1c2733; }
     .verif-bloc .texte .code { font-family: monospace; font-size: 8px; direction: ltr; display: inline-block; }
+    /* Isole un segment latin (nom de trimestre, de classe...) du réordonnancement
+       bidi appliqué au texte arabe environnant, pour éviter que "Trimestre 1" ou
+       "6ème A" ne se retrouvent mélangés/inversés. */
+    .ltr-inline { direction: ltr; unicode-bidi: embed; display: inline-block; }
 </style>
 </head>
 <body>
@@ -51,7 +55,7 @@
     </div>
 
     <div class="titre">
-        <h1>{{ ("كشف النقاط — " ~ bulletin.periode.nom)|ar_glyphs }}</h1>
+        <h1>{{ "كشف النقاط —"|ar_glyphs }} <span class="ltr-inline">{{ bulletin.periode.nom }}</span></h1>
         <div class="sous">{{ ("السنة الدراسية " ~ bulletin.periode.anneeScolaire)|ar_glyphs }}</div>
     </div>
 
@@ -63,7 +67,7 @@
                 {{ ("تاريخ الازدياد : " ~ bulletin.eleve.dateNaissance|date('d/m/Y'))|ar_glyphs }}
             </td>
             <td>
-                {{ ("القسم : " ~ bulletin.eleve.classe.nom)|ar_glyphs }}<br>
+                {{ "القسم :"|ar_glyphs }} <span class="ltr-inline">{{ bulletin.eleve.classe.nom }}</span><br>
                 {{ "حالة الكشف :"|ar_glyphs }} <span class="badge">{{ bulletin.statut.libelle }}</span><br>
                 {{ ("تاريخ الإصدار : " ~ ("now"|date('d/m/Y')))|ar_glyphs }}
             </td>
