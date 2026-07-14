@@ -37,6 +37,16 @@ class ArabicExtension extends AbstractExtension
         // max_chars élevé : on ne veut pas du retour à la ligne automatique
         // de la lib (pensé pour un rendu texte brut), le CSS/dompdf s'en charge.
         // hindo=false : on garde les chiffres occidentaux (notes, dates, matricules).
-        return $this->arabic->utf8Glyphs($texte, 10000, false, false);
+        //
+        // ar-php émet un Warning "Undefined array key" sur certains signes de
+        // ponctuation (table de correspondance de glyphes incomplète) sans que
+        // cela n'affecte le résultat — vérifié manuellement. Symfony convertit
+        // les warnings PHP en exception en dev ; on l'ignore localement.
+        set_error_handler(static fn () => true, E_WARNING);
+        try {
+            return $this->arabic->utf8Glyphs($texte, 10000, false, false);
+        } finally {
+            restore_error_handler();
+        }
     }
 }
